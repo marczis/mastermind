@@ -1,5 +1,10 @@
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
 
-//I know these could be user inputs and so on, but right now I simplify the thing
-//because of the short deadline.
-#define NUM_OF_ROWS 4
-#define ROUNDS 8
+class Config
+{
+public:
+	int static get_number_of_rows() { return 4; };
+};
+
+#endif
