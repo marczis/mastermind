@@ -13,7 +13,7 @@ public:
 	enum class Colors { Black = 0, Yellow, Green, Red };
 	//using LineItems = std::vector<Colors>;
 	typedef std::vector<Colors> LineItems;
-	enum class CmpResItem { Bad = 0, Has = 1, Good = 2};
+	enum class CmpResItem { Bad = 0, Has = 1, Good = 2}; //NOTE: Order does matter !
 	typedef std::vector<CmpResItem> CmpRes;
 
 	class WrongInput : public std::exception {};

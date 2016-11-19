@@ -4,7 +4,7 @@ utprog = mm-ut
 
 incs = 
 libs = 
-flags = -Wall -std=c++11
+flags = -Wall -std=c++11 -g
 
 commonsrcs = Line.cpp
 srcs = main.cpp $(commonsrcs)

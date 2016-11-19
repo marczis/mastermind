@@ -1,6 +1,7 @@
 #include "Line.h"
 
 #include <sstream>
+#include <algorithm>
 
 Line::Line(const std::string &line)
  :items(Config::get_number_of_cols())
@@ -31,7 +32,22 @@ Line::CmpRes Line::compare(const Line& other) const
 		res[i] = CmpResItem::Bad;
 		if (getItem(i) == other.getItem(i)) {
 			res[i] = CmpResItem::Good;
+			continue;
 		}
 	}
+
+	for(int o = 0; o < Config::get_number_of_cols(); ++o) {
+		if (res[o] == CmpResItem::Good) continue;
+		for( int t = 0; t < Config::get_number_of_cols(); ++t ) {
+			if ( (res[t] == CmpResItem::Good) ||
+			     (res[t] == CmpResItem::Has) ) continue;
+			if (other.getItem(o) == getItem(t)) {
+				res[t] = CmpResItem::Has;
+				break;
+			}
+		}
+	}
+
+	std::sort(res.begin(), res.end());
 	return res;
 }
