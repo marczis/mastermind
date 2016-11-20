@@ -7,7 +7,7 @@ class Game
 {
 private:
 	Line code;
-
+	
 	Line get_guess();
 
 public:

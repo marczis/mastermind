@@ -34,6 +34,8 @@ void Game::play()
 
 	bool end = false;
 	int rounds = 1;
+	//Note: I did not limited the game to x turns. 
+	//Could be added here easily.
 	while ( !end ) {
 		std::cout << "[" << rounds++ << "]:";
 		Line guess = get_guess();
@@ -48,6 +50,7 @@ void Game::play()
 				break;
 			}
 		}
+		
 		if (end) {
 			std::cout << "Grats ! You figured out in: " << rounds << " steps." << std::endl;
 		}
