@@ -12,14 +12,22 @@ class utLine : public CppUnit::TestFixture
 	CPPUNIT_TEST ( testAllBad );
 	CPPUNIT_TEST ( test1Good );
 	CPPUNIT_TEST ( test1Has );
+	CPPUNIT_TEST ( testRest );
 	CPPUNIT_TEST_SUITE_END();
 
 	void testCreate();
 	void testNotEnoughNumbers();
+
+	//Little helper to make next ones easier
+	void test(const std::string &a, const std::string &b, Line::CmpRes res);
+	//And this one, because I'm more than lazy.
+	typedef Line::CmpResItem X;
+
 	void testCompEq();
 	void testAllBad();
 	void test1Good();
 	void test1Has();
+	void testRest();
 
 public:
 	void setUp() {}
@@ -41,57 +49,43 @@ void utLine::testNotEnoughNumbers()
 	CPPUNIT_ASSERT_THROW(Line g("1 2 3"), Line::WrongInput);
 }
 
-void utLine::testCompEq()
+void utLine::test(const std::string &a, const std::string &b, Line::CmpRes res)
 {
+	Line::CmpRes x = Line(a).compare(Line(b));
 	//You may think that it would be better to have a real
 	//class for CmpRes, and have == operator, BUT, in the real
 	//game logic I don't need that, and I'm keen not to introduce
 	//extra code for unit testing. Alto I could extend that class,
 	//but than I don't test the original code again... taff decision.
 	//Wondering if we agree about these things.
-	Line::CmpRes x = Line("1 2 3 4").compare(Line("1 2 3 4"));
-	Line::CmpRes y = {
-					  Line::CmpResItem::Good
-					 ,Line::CmpResItem::Good
-					 ,Line::CmpResItem::Good
-					 ,Line::CmpResItem::Good
-					 };
-	CPPUNIT_ASSERT( x == y );
+	CPPUNIT_ASSERT( x == res );
+}
+
+void utLine::testCompEq()
+{
+	test("1 2 3 4", "1 2 3 4", {X::Good, X::Good, X::Good, X::Good});
 }
 
 void utLine::testAllBad()
 {
-	Line::CmpRes x = Line("1 2 3 4").compare(Line("5 6 7 8"));
-	Line::CmpRes y = {
-					  Line::CmpResItem::Bad
-					 ,Line::CmpResItem::Bad
-					 ,Line::CmpResItem::Bad
-					 ,Line::CmpResItem::Bad
-					 };
-	CPPUNIT_ASSERT( x == y );
+	test("1 2 3 4", "5 6 7 8", {X::Bad, X::Bad, X::Bad, X::Bad});
 }
 
 void utLine::test1Good()
 {
-	Line::CmpRes x = Line("1 2 3 4").compare(Line("5 2 7 8"));
-	Line::CmpRes y = {
-					  Line::CmpResItem::Good //This is intentional
-					 ,Line::CmpResItem::Bad  //we don't want to tell
-					 ,Line::CmpResItem::Bad  //at which position we have
-					 ,Line::CmpResItem::Bad  //the good. So result has to be sorted
-					 };
-	CPPUNIT_ASSERT( x == y );
+	test("1 2 3 4", "5 2 7 8", {X::Good, X::Bad, X::Bad, X::Bad});
 }
 
 void utLine::test1Has()
 {
-	Line::CmpRes x = Line("1 2 1 1").compare(Line("0 1 0 0"));
-	Line::CmpRes y = {
-					 Line::CmpResItem::Has
-					 ,Line::CmpResItem::Bad
-					 ,Line::CmpResItem::Bad
-					 ,Line::CmpResItem::Bad
-					 };
-	CPPUNIT_ASSERT( x == y );
+	test("1 2 1 1", "0 1 0 0", {X::Has, X::Bad, X::Bad, X::Bad});
 }
+
+void utLine::testRest()
+{
+	test("0 0 0 4", "1 2 3 0", {X::Has, X::Bad, X::Bad, X::Bad});
+	test("0 0 4 4", "1 2 0 0", {X::Has, X::Has, X::Bad, X::Bad});
+	test("0 4 4 4", "1 0 0 0", {X::Has, X::Bad, X::Bad, X::Bad});
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION( utLine );
