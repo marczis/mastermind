@@ -3,8 +3,23 @@
 #include <sstream>
 #include <algorithm>
 
+Line::Line()
+ :items(Config::get_number_of_cols()),random(rd())
+{ 
+}
+
 Line::Line(const std::string &line)
- :items(Config::get_number_of_cols())
+ :Line()
+{
+	setup(line);
+}
+
+Line::Line(const Line&& other)
+ :items(std::move(other.items)), random(std::move(other.random))
+{
+}
+
+void Line::setup(const std::string &line)
 {
 	std::stringstream l(line);
 
@@ -15,6 +30,13 @@ Line::Line(const std::string &line)
 		//If I would have more time, I would make a better error handling.
 		//So I can tell to the user what's wrong with the input.
 		x = Colors(i);
+	}
+}
+
+void Line::setup_random()
+{
+	for( auto &x: items ) {
+		x = Colors(random() % int(Colors::Count));
 	}
 }
 
@@ -48,6 +70,24 @@ Line::CmpRes Line::compare(const Line& other) const
 		}
 	}
 
-	std::sort(res.begin(), res.end());
+	std::sort(res.begin(), res.end(), std::greater<CmpResItem>());
 	return res;
+}
+
+std::ostream& operator<<(std::ostream &os, const Line::CmpRes &res)
+{
+	for (auto x: res) {
+		switch(x) {
+			case Line::CmpResItem::Bad:
+				os << "x ";
+				break;
+			case Line::CmpResItem::Has:
+				os << "O ";
+				break;
+			case Line::CmpResItem::Good:
+				os << "# ";
+				break;
+		}
+	}
+	return os;
 }

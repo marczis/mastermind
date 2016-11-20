@@ -6,7 +6,7 @@ incs =
 libs = 
 flags = -Wall -std=c++11 -g
 
-commonsrcs = Line.cpp
+commonsrcs = Line.cpp Game.cpp
 srcs = main.cpp $(commonsrcs)
 
 testsrcs = test/test.cpp test/utLine.cpp Line.cpp

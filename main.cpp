@@ -1,14 +1,8 @@
-#include "config.h"
+#include "Game.h"
 
 int main(const int argc, const char *argv[])
 {
-	//Main loop
-	while ( 1 ) {
-		//Get user input
-		
-	}
-	
-	//Game logic
-	//Update ui
+	Game game;
+	game.play();	
 	return 0;
 }
