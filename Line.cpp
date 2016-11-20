@@ -70,7 +70,7 @@ Line::CmpRes Line::compare(const Line& other) const
 		}
 	}
 
-	std::sort(res.begin(), res.end(), std::greater<CmpResItem>());
+	std::sort(res.begin(), res.end());//, std::greater<CmpResItem>());
 	return res;
 }
 
